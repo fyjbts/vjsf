@@ -3,8 +3,8 @@ import { createUseStyles } from 'vue-jss'
 
 import MonacoEditor from './components/MonacoEditor'
 import demos from './demos' //引入demos的index.ts文件
-import SchemaForm,{ThemeProvider} from '../lib'
-import themeDefault from "../lib/theme-default"
+import SchemaForm, { ThemeProvider } from '../lib'
+import themeDefault from '../lib/theme-default'
 import customFormat from './plugin/customFormat'
 // TODO: 在lib中export
 type Schema = any
@@ -80,7 +80,7 @@ export default defineComponent({
       schemaCode: string
       dataCode: string
       uiSchemaCode: string
-      customValidate:((d:any,e:any)=>void)|undefined
+      customValidate: ((d: any, e: any) => void) | undefined
     } = reactive({
       schema: null,
       data: {},
@@ -88,12 +88,12 @@ export default defineComponent({
       schemaCode: '',
       dataCode: '',
       uiSchemaCode: '',
-      customValidate:undefined
+      customValidate: undefined,
     })
 
     watchEffect(() => {
       const index = selectedRef.value
-      const d:any = demos[index]
+      const d: any = demos[index]
 
       demo.schema = d.schema
       demo.data = d.default
@@ -101,7 +101,7 @@ export default defineComponent({
       demo.schemaCode = toJson(d.schema)
       demo.dataCode = toJson(d.default)
       demo.uiSchemaCode = toJson(d.uiSchema)
-      demo.customValidate=d.customValidate
+      demo.customValidate = d.customValidate
     })
 
     console.log(demo.schema)
@@ -121,38 +121,37 @@ export default defineComponent({
       filed: 'schema' | 'data' | 'uiSchema',
       value: string,
     ) {
-     
-      
+      try {
         const json = JSON.parse(value)
+
+        // const json :any= value
+
         demo[filed] = json
-        (demo as any)[`${filed}Code`] = value
-        
-        
-     
-        // some thing
-        console.log("---------------",1111111111);
       
+      } catch (err) {
+        // some thing
+        ;(demo as any)[`${filed}Code`] = value
+      }
     }
 
     //工厂模式
     const handleSchemaChange = (v: string) => {
-      console.log("---------------",v);
-      handleCodeChange('schema', v) 
+      console.log('---------------', v)
+      handleCodeChange('schema', v)
     }
     const handleDataChange = (v: string) => handleCodeChange('data', v)
     const handleUISchemaChange = (v: string) => handleCodeChange('uiSchema', v)
 
     //响应式对象
-    const contextRef=ref();
+    const contextRef = ref()
     return () => {
       const classes = classesRef.value
       const selected = selectedRef.value
 
-      function validateForm(){
+      function validateForm() {
         //promise
-        contextRef.value.doValidate().
-        then((result:any)=>{
-          console.log(result);
+        contextRef.value.doValidate().then((result: any) => {
+          console.log(result)
           // ()=>console.log(contextRef.value.doValidate())
         })
       }
@@ -201,18 +200,18 @@ export default defineComponent({
               </div>
             </div>
             <div class={classes.form}>
-            <ThemeProvider theme={themeDefault as any }>
-              <SchemaForm
-                schema={demo.schema}
-                onChange={handleChange}
-                value={demo.data}
-                // theme={themeDefault as any}
-                //传递的是对象，子组件contextRef.value修改=>button重新执行
-                contextRef={contextRef}
-                customValidate={demo.customValidate}
-                uiSchema={demo.uiSchema || {}}
-                customFormats={customFormat}
-              />
+              <ThemeProvider theme={themeDefault as any}>
+                <SchemaForm
+                  schema={demo.schema}
+                  onChange={handleChange}
+                  value={demo.data}
+                  // theme={themeDefault as any}
+                  //传递的是对象，子组件contextRef.value修改=>button重新执行
+                  contextRef={contextRef}
+                  customValidate={demo.customValidate}
+                  uiSchema={demo.uiSchema || {}}
+                  customFormats={customFormat}
+                />
               </ThemeProvider>
               {/* <SchemaForm
                 schema={demo.schema!}

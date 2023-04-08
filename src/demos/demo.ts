@@ -1,4 +1,5 @@
 import PasswordWidget from "../components/PasswordWidget"
+//对象格式
 export default {
   name: 'Demo',
   schema: {
