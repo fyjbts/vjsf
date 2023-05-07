@@ -21,6 +21,7 @@ import { useVJSFContext } from './context'
 import def from 'ajv-i18n'
 import { isObject } from 'lodash'
 const THEME_PROVIDER_KEY = Symbol()
+
 //provide提供组件
 const ThemeProvider = defineComponent({
   name: 'VJSFThemeProvider',
@@ -31,8 +32,9 @@ const ThemeProvider = defineComponent({
     },
   },
   setup(props, { slots }) {
+    //当theme改变，provide的值就会改变
     const context = computed(() => props.theme) //ref对象：context.value
-    provide(THEME_PROVIDER_KEY, context)
+    provide(THEME_PROVIDER_KEY, context) //提供context响应式对象=>接受就是响应式对象
     // 插槽显示 <slot></slot>
     return () => slots.default && slots.default()
   },
@@ -52,8 +54,8 @@ export function getWidget<T extends CommonWidgetNames | SelectionWidgetNames>(
     if (uiSchema?.widget && isObject(uiSchema?.widget)) {
       return ref(uiSchema.widget)
     }
-    console.log("schema.format",schema.format);
-    
+    // console.log("schema.format",schema.format);
+
     if (schema.format) {
       if (formContext.formatMapRef.value[schema.format]) {
         return ref(formContext.formatMapRef.value[schema.format])

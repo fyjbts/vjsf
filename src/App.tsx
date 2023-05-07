@@ -73,6 +73,8 @@ export default defineComponent({
     const selectedRef: Ref<number> = ref(0)
 
     //demo的属性是响应式=>改变就会更新视图
+    //作为props=>响应式
+    //定义
     const demo: {
       schema: Schema | null
       data: any
@@ -91,10 +93,10 @@ export default defineComponent({
       customValidate: undefined,
     })
 
+    //当selectedRef变化，重新执行。默认第一次执行
     watchEffect(() => {
       const index = selectedRef.value
       const d: any = demos[index]
-
       demo.schema = d.schema
       demo.data = d.default
       demo.uiSchema = d.uiSchema
@@ -110,7 +112,7 @@ export default defineComponent({
 
     const classesRef = useStyles()
 
-    //更新value内容
+    //更新value内容-SchemaForm
     const handleChange = (v: any) => {
       demo.data = v
       demo.dataCode = toJson(v)
@@ -123,22 +125,15 @@ export default defineComponent({
     ) {
       try {
         const json = JSON.parse(value)
-
-        // const json :any= value
-
         demo[filed] = json
-      
+        ;(demo as any)[`${filed}Code`] = value
       } catch (err) {
         // some thing
-        ;(demo as any)[`${filed}Code`] = value
       }
     }
 
     //工厂模式
-    const handleSchemaChange = (v: string) => {
-      console.log('---------------', v)
-      handleCodeChange('schema', v)
-    }
+    const handleSchemaChange = (v: string) => handleCodeChange('schema', v)
     const handleDataChange = (v: string) => handleCodeChange('data', v)
     const handleUISchemaChange = (v: string) => handleCodeChange('uiSchema', v)
 

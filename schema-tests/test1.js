@@ -4,7 +4,6 @@
 const Ajv = require('ajv') //node环境运行
 const addFormats = require('ajv-formats')
 
-
 const schema = {
   // type:"string",
   // minLength:10
@@ -15,8 +14,7 @@ const schema = {
       type: 'string',
       minLength: 3,
       format: 'email',
-    //   format: 'test',//校验自定义test
-
+      //   format: 'test',//校验自定义test
     },
     age: {
       type: 'number',
@@ -41,7 +39,7 @@ const schema = {
 // const data="why"//校验data是string
 const data = {
   name: 'why',
-  age:18,
+  age: 18,
   pets: ['dog', 'cat'],
   isWorker: true,
 }
@@ -49,10 +47,10 @@ const ajv = new Ajv() // options can be passed, e.g. {allErrors: true}
 addFormats(ajv)
 
 //自定义format
-//test是format名字，data就是validate(data)的data
-ajv.addFormat("test",(data)=>{
-    console.log(data);
-    return data==="haha"
+//test是format名字，data就是validate(data)的data的name属性
+ajv.addFormat('test', (data) => {
+  console.log(data)
+  return data === 'haha'
 })
 
 const validate = ajv.compile(schema)
@@ -71,4 +69,3 @@ keyword：表示不符合要求的字段
       message: 'must NOT have fewer than 10 characters'
     }
 ] */
-

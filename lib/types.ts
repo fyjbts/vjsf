@@ -1,8 +1,8 @@
 //存放类型声明
 import { PropType, defineComponent, DefineComponent } from 'vue'
 import SelectionWidget from './widget/SelectionWidget'
-import {ErrorSchema} from "./validator"
-import {FormatDefinition} from "ajv"
+import { ErrorSchema } from './validator'
+import { FormatDefinition } from 'ajv'
 //枚举
 export enum SchemaTypes {
   'NUMBER' = 'number',
@@ -72,15 +72,14 @@ export const FiledPropsDefine = {
     required: true,
   },
 
-  uiSchema:{
-    type:Object as PropType<UISchema>,
-    required:true
+  uiSchema: {
+    type: Object as PropType<UISchema>,
+    required: true,
   },
-  errorSchema:{
+  errorSchema: {
     type: Object as PropType<ErrorSchema>,
     required: true,
   },
- 
 } as const
 
 export const TypeHelperComponent = defineComponent({
@@ -100,18 +99,17 @@ export const CommonWidgetPropsDefine = {
     type: Function as PropType<(v: any) => void>,
     required: true,
   },
-  errors:{
-    type:Array as PropType<string[]>,
-    
+  errors: {
+    type: Array as PropType<string[]>,
   },
-  schema:{
-    type:Object as PropType<Schema>,
-    required:true
+  schema: {
+    type: Object as PropType<Schema>,
+    required: true,
   },
 
-  options:{
-    type:Object as PropType<{[key:string]:any}>,
-  }
+  options: {
+    type: Object as PropType<{ [key: string]: any }>,
+  },
 } as const //props提取
 
 export const SelectionWidgetPropsDefine = {
@@ -125,7 +123,6 @@ export const SelectionWidgetPropsDefine = {
     >,
     required: true,
   },
-  
 } as const
 
 export type CommonWidgetDefine = DefineComponent<typeof CommonWidgetPropsDefine>
@@ -139,7 +136,7 @@ export enum SelectionWidgetNames {
 
 export enum CommonWidgetNames {
   TextWidget = 'TextWidget',
-  NumberWidget = 'TextWidget',
+  NumberWidget = 'NumberWidget',
 }
 export interface Theme {
   widgets: {
@@ -149,22 +146,19 @@ export interface Theme {
   }
 }
 
-
-export type UISchema={
-  widget?:string |CommonWidgetDefine,
-  properties?:{
-    [key:string]:UISchema
-  },
-  items?:UISchema|UISchema[]
-}&{
+export type UISchema = {
+  widget?: string | CommonWidgetDefine
+  properties?: {
+    [key: string]: UISchema
+  }
+  items?: UISchema | UISchema[]
+} & {
   //用户自定义属性
-  [key:string]:any//w:
+  [key: string]: any //w:
 }
 
-
 export interface CustomFormat {
-  name:string,
-  definition:FormatDefinition<string>,
-  component:CommonWidgetDefine,
-
+  name: string
+  definition: FormatDefinition<string>
+  component: CommonWidgetDefine
 }

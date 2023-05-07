@@ -10,9 +10,16 @@ import {
   watch,
   watchEffect,
   ref,
-  computed
+  computed,
 } from 'vue'
-import { CustomFormat, Schema, SchemaTypes, Theme, UISchema,CommonWidgetDefine  } from './types' //类型声明
+import {
+  CustomFormat,
+  Schema,
+  SchemaTypes,
+  Theme,
+  UISchema,
+  CommonWidgetDefine,
+} from './types' //类型声明
 import SchemaItem from './SchemaItems'
 import { SchemaFormContextKey } from './context'
 import Ajv, { Options } from 'ajv'
@@ -63,18 +70,17 @@ export default defineComponent({
     customValidate: {
       type: Function as PropType<(data: any, errors: any) => void>,
     },
-    customFormats:{
-      type: [Array,Object] as PropType<CustomFormat[]|CustomFormat>,
+    customFormats: {
+      type: [Array, Object] as PropType<CustomFormat[] | CustomFormat>,
     },
-    uiSchema:{
-      type:Object as PropType<UISchema>
-    }
+    uiSchema: {
+      type: Object as PropType<UISchema>,
+    },
   },
   setup(props, ctx) {
-   
+    // console.log("props",props,props.value);//Proxy(Object) 1
 
     const errorSchemaRef: Ref<ErrorSchema> = shallowRef({})
-
     const validatorRef: Ref<Ajv> = shallowRef() as any
 
     //监测ajvOptions变化=>validatorRef就会改变
@@ -92,10 +98,12 @@ export default defineComponent({
     //     ...props.ajvOptions
     // })
 
-    if(props.customFormats){
-      const customFormats=Array.isArray(props.customFormats)?props.customFormats:[props.customFormats]
-      customFormats.forEach((format)=>{
-        validatorRef.value.addFormat(format.name,format.definition)
+    if (props.customFormats) {
+      const customFormats = Array.isArray(props.customFormats)
+        ? props.customFormats
+        : [props.customFormats]
+      customFormats.forEach((format) => {
+        validatorRef.value.addFormat(format.name, format.definition)
       })
     }
 
@@ -119,7 +127,7 @@ export default defineComponent({
     async function doValidate() {
       //记录校验次数  --点击校验，校验延迟，此时输入的props.value变化=>执行校验。validateIndex变化
       //当点击校验的那个index就跟全局validateIndex不同
-      const index = validateIndex.value += 1
+      const index = (validateIndex.value += 1)
       const result = await validateFormData(
         validatorRef.value,
         props.value,
@@ -127,11 +135,11 @@ export default defineComponent({
         props.locale,
         props.customValidate,
       )
-      
-      if (index !== validateIndex.value) return//第一次点击校验不执行
-      errorSchemaRef.value = result.errorSchema//执行最后一次确定好的校验
+      //防止执行多次校验
+      if (index !== validateIndex.value) return //第一次点击校验不执行
+      errorSchemaRef.value = result.errorSchema //执行最后一次确定好的校验
       validReSolveRef.value(result) //resolve(result) 异步操作完成 app的onclick事件执行then
-      
+
       validReSolveRef.value = undefined
     }
     watch(
@@ -142,7 +150,8 @@ export default defineComponent({
         if (props.contextRef) {
           //更改contextRef.value，使得父组件button声明函数更新
           props.contextRef.value = {
-            doValidate() {//async doValidate
+            doValidate() {
+              //async doValidate
               //ajv.validate(schema规则,data)
               /* const valid=validatorRef.value.validate(props.schema,props.value) as boolean
               return {
@@ -156,16 +165,17 @@ export default defineComponent({
                 validReSolveRef.value = resolve
                 doValidate() //校验
               })
+              //await validateFormData() 等validateFormData()里的异步函数执行完，执行await下面内容
               /*   const result=await validateFormData(
                 validatorRef.value,
                 props.value,
                 props.schema,
                 props.locale,
-                props.customValidate
-                 errorSchemaRef.value=result.errorSchema;
+                props.customValidate)
+                errorSchemaRef.value=result.errorSchema;
               
               return result
-                ) */
+                */
             },
           }
         }
@@ -175,25 +185,27 @@ export default defineComponent({
       },
     )
     const formatMapRef = computed(() => {
-      const result: { [key: string]: CommonWidgetDefine } = {};
+      const result: { [key: string]: CommonWidgetDefine } = {}
       if (props.customFormats) {
-        const customFormats = Array.isArray(props.customFormats) ? props.customFormats : [props.customFormats];
-        return customFormats.reduce((result,format )=> {
+        const customFormats = Array.isArray(props.customFormats)
+          ? props.customFormats
+          : [props.customFormats]
+        return customFormats.reduce((result, format) => {
           // validatorRef.value.addFormat(format.name, format.definition);
-          result[format.name]=format.component
-          return result;
-        },{} as {[key:string]:CommonWidgetDefine});
-      }else{
+          result[format.name] = format.component
+          return result
+        }, {} as { [key: string]: CommonWidgetDefine })
+      } else {
         return {}
       }
-      
-    });
-     //SchemaItem响应式变化=>provide不会更新执行
+    })
+
+    //SchemaItem响应式变化=>provide不会更新执行
     // const context:any=reactive({SchemaItem})
     //provide：theme对象
     const context: any = {
       SchemaItem,
-      formatMapRef
+      formatMapRef,
       // theme:props.theme
     }
     provide(SchemaFormContextKey, context) //传递值给Field组件
@@ -202,7 +214,8 @@ export default defineComponent({
       props.onChange(v)
     }
     return () => {
-      const { schema, value,uiSchema } = props
+      //新的props
+      const { schema, value, uiSchema } = props
 
       return (
         <SchemaItem
@@ -211,7 +224,7 @@ export default defineComponent({
           onChange={handleChange}
           value={value}
           errorSchema={errorSchemaRef.value || {}}
-          uiSchema={uiSchema|| {}}
+          uiSchema={uiSchema || {}}
         />
       )
     }

@@ -1,6 +1,6 @@
-import { defineComponent, ref, PropType, watch, nextTick } from 'vue'
+import { defineComponent, ref, PropType, watch, nextTick, computed } from 'vue'
 import { CommonWidgetDefine, CommonWidgetPropsDefine } from '../types'
-import FormItem,{withFormItem} from '../theme-default/FormItem'
+import FormItem, { withFormItem } from '../theme-default/FormItem'
 const TextWidget = withFormItem(
   defineComponent({
     name: 'TextWidget',
@@ -18,18 +18,25 @@ const TextWidget = withFormItem(
               }
           }) */
       }
+      const styleRef = computed(() => {
+        return {
+          color: (props.options && props.options.color) || 'black',
+        }
+      })
+
       return () => {
         return (
           // <FormItem {...props}>
-            <input
-              type="text"
-              value={props.value as any}
-              onInput={handleChange}
-            />
+          <input
+            type="text"
+            value={props.value as any}
+            onInput={handleChange}
+            style={styleRef.value}
+          />
           // </FormItem>
         )
       }
     },
-  })
+  }),
 )
 export default TextWidget

@@ -11,12 +11,16 @@ export default defineComponent({
       if (Number.isNaN(num)) {
         props.onChange(undefined)
       } else {
+        //执行app的onChange
         props.onChange(num)
       }
     }
+
     const NumberWidgetRef = getWidget(CommonWidgetNames.NumberWidget)
     return () => {
+      //NumberWidget的引用
       const NumberWidget = NumberWidgetRef.value
+      //...rest是剩余的属性:属性值
       const { rootSchema, errorSchema, ...rest } = props
       return (
         <NumberWidget

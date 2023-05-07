@@ -26,10 +26,10 @@ export default defineComponent({
     const handleCodeChange = (code: string) => {
       let schema: any
       try {
-        schema = JSON.parse(code)// 转换回来
+        schema = JSON.parse(code) // 转换回来
       } catch (err) {} //parse错误
       //页面修改，schemaRef更新=>jsx重新执行渲染模板
-      schemaRef.value = schema// 转换回来
+      schemaRef.value = schema // 转换回来
     }
     const classesRef = useStyles()
     const classes = classesRef.value

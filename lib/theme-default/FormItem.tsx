@@ -45,15 +45,19 @@ export default FormItem
 export function withFormItem(Widget: any) {
   return defineComponent({
     name: `Wrapped${Widget.name}`, //组件名
-    props: CommonWidgetPropsDefine,//props是使用该return组件<defineComponent>传递的参数
-    setup(props, {attrs,slots}) {//attrs:props没有声明接收到的属性：适用于SelectionWidget
+    props: CommonWidgetPropsDefine, //props是使用该return组件<defineComponent>传递的参数
+    setup(props, { attrs, slots }) {
+      //attrs:props没有声明接收到的属性：适用于SelectionWidget
       return () => {
-        console.log("props",props.errors);
-        
-        return <FormItem {...props}>
+        // console.log("props",props.errors);
+
+        return (
+          <FormItem {...props}>
             <Widget {...props} {...attrs}></Widget>
-            </FormItem >
+          </FormItem>
+        )
       }
     },
   }) as CommonWidgetDefine
 }
+;``

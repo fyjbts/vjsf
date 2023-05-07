@@ -7,12 +7,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-const PropsType={
-  msg:String,
-  age:{
-    type:Number,
-    required:true
-  } 
+const PropsType = {
+  msg: String,
+  age: {
+    type: Number,
+    required: true,
+  },
 } as const
 
 export default defineComponent({
@@ -23,11 +23,10 @@ export default defineComponent({
   },
 
   // props:PropsType,
-  
-  mounted(){
-    console.log(this.age);
-    
-  }
+
+  mounted() {
+    console.log(this.age)
+  },
 })
 </script>
 

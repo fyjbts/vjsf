@@ -24,26 +24,28 @@ function toErrorSchema(errors: TransformerErrorObject[]) {
   if (errors.length < 1) return {}
   return errors.reduce((errorSchema, error) => {
     const { property, message } = error
-   
-    const patharr = property.split('/').filter(Boolean); // 把字符串切分成数组，去掉空字符串
+
+    const patharr = property.split('/').filter(Boolean) // 把字符串切分成数组，去掉空字符串
     // /obj/a/0 [obj, a,0]
-  
-   const path = toPath(patharr) // /obj/a/0 [obj, a,0]
+
+    const path = toPath(patharr) // /obj/a/0 [obj, a,0]
 
     let parent = errorSchema //对象的引用{}
 
     if (path.length > 0 && path[0] === '') {
       path.splice(0, 1) //删除根节点为空
     }
-   
+
     //遍历path
     for (const segment of path.slice(0)) {
+      //path.slice(0)就是path，但是是新数组
       if (!(segment in parent)) {
         ;(parent as any)[segment] = {}
       }
       parent = parent[segment] //{ obj: { a: {} } }
     }
 
+    //parent此时是最里面的值
     if (Array.isArray(parent._errors)) {
       ;(parent._errors as any) = parent._errors.concat(message || '')
     } else {
@@ -75,12 +77,12 @@ function TransformerErrors(
 }
 
 //校验数据
-export async function  validateFormData(
+export async function validateFormData(
   validator: Ajv, //类也是一种数据类型
   formData: any,
   schema: Schema,
   locale = 'zh',
-  customValidate?: (data: any, errors: any) => void,//SchemaForm传递的函数定义
+  customValidate?: (data: any, errors: any) => void, //SchemaForm传递的函数定义
 ) {
   let validatorError: { message: string } | null = null
   try {
@@ -89,9 +91,10 @@ export async function  validateFormData(
   } catch (err: any) {
     validatorError = err
   }
-
+  //转换成对应语言的错误
   i18n[locale](validator.errors)
 
+  //转换成数组[{},{},{}]
   let errors = TransformerErrors(validator.errors)
   if (validatorError) {
     errors = [
@@ -101,23 +104,25 @@ export async function  validateFormData(
       } as TransformerErrorObject,
     ]
   }
-//   let errors=
-// [
-//   {
-//     property: '/name',
-//     schemaPath: '#/properties/name/test/minLength',
-//     name: 'minLength',
-//     params: { limit: 10 },
-//     message: '不应少于 10 个字符'
-//   },
-//   {
-//     property: '/name/a/0',
-//     schemaPath: '#/properties/name/test',
-//     name: 'test',
-//     params: {},
-//     message: '应当通过 "test 关键词校验"'
-//   }
-// ]
+  //   let errors=
+  // [
+  //   {
+  //     property: '/name',
+  //     schemaPath: '#/properties/name/test/minLength',
+  //     name: 'minLength',
+  //     params: { limit: 10 },
+  //     message: '不应少于 10 个字符'
+  //   },
+  //   {
+  //     property: '/name/a/0',
+  //     schemaPath: '#/properties/name/test',
+  //     name: 'test',
+  //     params: {},
+  //     message: '应当通过 "test 关键词校验"'
+  //   }
+  // ]
+
+  //将errors数组转换为errorSchema对象
   const errorSchema = toErrorSchema(errors)
 
   if (!customValidate) {
@@ -146,7 +151,7 @@ export async function  validateFormData(
   //自定义校验
   //customValidate自定义校验函数执行
   await customValidate(formData, proxy) //proxy
-  
+
   const newErrorSchema = mergeObjects(errorSchema, proxy)
   return {
     errors,
@@ -208,5 +213,3 @@ export function mergeObjects(obj1: any, obj2: any, concatArrays = false) {
     return acc
   }, acc)
 }
-
-

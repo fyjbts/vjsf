@@ -2,15 +2,21 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
     <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" :age="12" />
-    <p>{{state.name}}</p>
-    <p>{{name}}</p>
-    <p>{{computedNameRef}}</p>
-
+    <p>{{ state.name }}</p>
+    <p>{{ name }}</p>
+    <p>{{ computedNameRef }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType,reactive,ref,computed, watchEffect} from 'vue'
+import {
+  defineComponent,
+  PropType,
+  reactive,
+  ref,
+  computed,
+  watchEffect,
+} from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 
 interface Config {
@@ -21,26 +27,25 @@ export default defineComponent({
   components: {
     HelloWorld,
   },
-  setup(props,{slots,attrs,emit}){
+  setup(props, { slots, attrs, emit }) {
     //ref：{value:xx}
-    const nameRef=ref("jockey")
-    const state=reactive({name:"jockey"})
-    setTimeout(()=>{
-      nameRef.value+"2"
-    },2000)
-    const computedNameRef=computed(()=>{
-      return nameRef.value+"2"
+    const nameRef = ref('jockey')
+    const state = reactive({ name: 'jockey' })
+    setTimeout(() => {
+      nameRef.value + '2'
+    }, 2000)
+    const computedNameRef = computed(() => {
+      return nameRef.value + '2'
     })
-    watchEffect(()=>{
-      console.log(nameRef.value);
-      
+    watchEffect(() => {
+      console.log(nameRef.value)
     })
     return {
       state,
-      name:nameRef,
-      computedNameRef
+      name: nameRef,
+      computedNameRef,
     }
-  }
+  },
 })
 </script>
 

@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "eslint --fix --ext .js,.vue src test/unit"
+    "lint": "eslint --fix --ext .js,.vue src",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "ajv": "^8.12.0",
@@ -43,8 +44,8 @@
     "@vue/vue3-jest": "^27.0.0-alpha.1",
     "babel-jest": "^27.0.6",
     "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^8.0.3",
     "jest": "^27.0.5",
     "json-schema-merge-allof": "^0.8.1",

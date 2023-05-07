@@ -26,16 +26,15 @@ const format: CustomFormat = {
           }
         })
         return () => {
-            return (
-              <input
-                type="color"
-                value={props.value as any}
-                onInput={handleChange}
-                style={styleRef.value}
-                
-              />
-            )
-          }
+          return (
+            <input
+              type="color"
+              value={props.value as any}
+              onInput={handleChange}
+              style={styleRef.value}
+            />
+          )
+        }
       },
     }),
   ),
