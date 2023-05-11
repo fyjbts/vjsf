@@ -26,9 +26,11 @@ export default {
         items: [
           {
             type: 'string',
+            title: 'staticArray',
           },
           {
             type: 'number',
+            title: 'staticArray',
           },
         ],
       },
@@ -40,9 +42,11 @@ export default {
           properties: {
             name: {
               type: 'string',
+              title: 'singleTypeArray',
             },
             age: {
               type: 'number',
+              title: 'singleTypeArray',
             },
           },
         },
